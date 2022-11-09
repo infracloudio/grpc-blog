@@ -8,3 +8,7 @@ tasks:
   gen-gogo-pb:
     cmds:
       - protoc --gofast_out=. gogo_protobuf/*.proto
+
+  gen-pkg:
+    cmds:
+      - protoc --proto_path=packaging packaging/*.proto --go_out=packaging

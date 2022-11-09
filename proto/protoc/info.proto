@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package info;
 
-option go_package = "github.com/infracloudio/grpc-blog/proto/protoc";
+option go_package = "github.com/hitesh-infracloud/awesome-code/proto/protoc";
 
 message BenchSmall {
   string action = 1;

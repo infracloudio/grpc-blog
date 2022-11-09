@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package laptop_pkg;
+option go_package = "/pb";
+
+import "memory.proto";
+
+message CPU {
+  string brand = 1;
+  string name = 2;
+  uint32 cores = 3;
+}
+
+message GPU {
+  string brand = 1;
+  string name = 2;
+  uint32 cores = 3;
+  Memory memory = 4;
+}
+

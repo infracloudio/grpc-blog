@@ -1,6 +1,6 @@
 goos: linux
 goarch: amd64
-pkg: github.com/infracloudio/grpc-blog/proto
+pkg: github.com/hitesh-infracloud/awesome-code/proto
 cpu: AMD Ryzen 5 4600U with Radeon Graphics         
 BenchmarkJSONMarshal/SmallData-12         	 3570306	       356.3 ns/op	      64 B/op	       1 allocs/op
 BenchmarkJSONMarshal/MediumData-12        	  839832	      1439 ns/op	     480 B/op	       2 allocs/op
@@ -27,4 +27,3 @@ BenchmarkGogoPbUnMarshal/MediumData-12    	  336116	      3487 ns/op	     376 B/
 BenchmarkGogoPbUnMarshal/LargeData-12     	  138409	      7608 ns/op	     832 B/op	      13 allocs/op
 
 PASS
-ok  	github.com/infracloudio/grpc-blog/proto	27.652s
