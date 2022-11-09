@@ -1,13 +1,20 @@
 package app
 
 import (
+	"context"
+	"crypto/tls"
 	"fmt"
 	"github.com/infracloudio/grpc-blog/greet_app/internal/app/server"
 	greetpb "github.com/infracloudio/grpc-blog/greet_app/internal/pkg/proto"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
 	"log"
 	"net"
 	"os"
+	"strings"
 )
 
 type App struct {
@@ -30,7 +37,12 @@ func (a *App) Start() {
 		log.Fatalf("Failed to listen: %v", err)
 	}
 
-	opts := []grpc.ServerOption{}
+	cert, err := tls.LoadX509KeyPair("internal/app/server/cert/public.crt", "internal/app/server/cert/private.key")
+	if err != nil {
+		log.Fatalf("failed to load key pair: %s", err)
+	}
+
+	opts := []grpc.ServerOption{grpc.UnaryInterceptor(validateToken), grpc.Creds(credentials.NewServerTLSFromCert(&cert))}
 	a.grpcServer = grpc.NewServer(opts...)
 	greetpb.RegisterGreetServiceServer(a.grpcServer, server.GetNewGreetServer())
 
@@ -43,4 +55,27 @@ func (a *App) Start() {
 
 func (a *App) Shutdown() {
 	a.grpcServer.GracefulStop()
+}
+
+func validateToken(ctx context.Context, req interface{}, _ *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return nil, status.Errorf(codes.InvalidArgument, "missing metadata")
+	}
+
+	if !valid(md["authorization"]) {
+		return nil, status.Errorf(codes.Unauthenticated, "invalid token")
+	}
+
+	return handler(ctx, req)
+}
+
+func valid(authorization []string) bool {
+	if len(authorization) < 1 {
+		return false
+	}
+
+	token := strings.TrimPrefix(authorization[0], "Bearer ")
+
+	return token == "client-x-id"
 }

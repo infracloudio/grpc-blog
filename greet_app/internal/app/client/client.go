@@ -4,7 +4,10 @@ import (
 	"context"
 	"fmt"
 	greetpb "github.com/infracloudio/grpc-blog/greet_app/internal/pkg/proto"
+	"golang.org/x/oauth2"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/credentials/oauth"
 	"log"
 	"os"
 )
@@ -12,13 +15,19 @@ import (
 func main() {
 	fmt.Println("Starting greet client")
 
-	opts := grpc.WithInsecure()
+	rpcCreds := oauth.NewOauthAccess(&oauth2.Token{AccessToken: "client-x-id"})
+	trnCreds, err := credentials.NewClientTLSFromFile("internal/app/client/cert/public.crt", "localhost")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	opts := []grpc.DialOption{grpc.WithTransportCredentials(trnCreds), grpc.WithPerRPCCredentials(rpcCreds)}
 
 	servAddr := ":50059"
 	if len(os.Getenv("GRPC_SRV_ADDR")) > 0 {
 		servAddr = os.Getenv("GRPC_SRV_ADDR")
 	}
-	cc, err := grpc.Dial(servAddr, opts)
+	cc, err := grpc.Dial(servAddr, opts...)
 	if err != nil {
 		log.Fatalf("could not connect: %v", err)
 	}
