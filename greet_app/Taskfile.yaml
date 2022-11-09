@@ -1,0 +1,76 @@
+version: '3'
+
+vars:
+  BUILD_TAG:
+    sh: if [ "$GOARCH" == "arm64" ]; then echo "dynamic"; else echo "musl"; fi
+
+tasks:
+  build-proto:
+    cmds:
+      - protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative internal/pkg/proto/*.proto
+
+  gen-proto:
+    desc: "Generate code"
+    cmds:
+      - buf mod update
+      - buf generate
+
+  clean-generate:
+    desc: "Clear all generated code"
+    cmds:
+      - find . -type f -name "*.pb.go" -not -wholename './vendor/*'| xargs rm
+      - find . -type f -name "*pb_test.go" -not -wholename './vendor/*'| xargs rm
+
+  clean-cache:
+    desc: "Clear all task cache"
+    cmds:
+      - rm -rf .task
+
+  clean-builds:
+    desc: "Clear all binaries"
+    cmds:
+      - rm -rf ./build/out
+
+  prune:
+    desc: "Clean all"
+    cmds:
+      - task: clean-cache
+      - task: clean-builds
+      - task: clean-generate
+
+  lint:
+    desc: "linting"
+    cmds:
+      - buf lint
+
+  compile:
+    cmds:
+      - go build -o ./build/out/greet_app -a -tags {{.BUILD_TAG}} -ldflags "-X  main.GitCommit={{.GIT_COMMIT}}" cmd/main.go
+    silent: true
+    sources:
+      - ./internal/app/app.go
+      - ./internal/app/**/*.go
+      - ./internal/pkg/**/*.go
+      - ./cmd/**/*.go
+    generates:
+      - ./build/out/greet_app
+    vars:
+      GIT_COMMIT:
+        sh: git rev-parse HEAD
+
+  run:local:
+    cmds:
+      - go run cmd/main.go
+
+  build-image:
+    docker build -t hiteshpattanayak/greet_app:latest -f ./build/Dockerfile .
+
+  push-image:
+    docker push hiteshpattanayak/greet_app:latest
+
+  run-app:
+    docker run -p 50059:50059 hiteshpattanayak/greet_app:latest
+
+  run:client:
+    cmds:
+      - go run internal/app/client/client.go

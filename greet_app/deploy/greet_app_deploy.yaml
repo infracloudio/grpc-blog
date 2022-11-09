@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: greet-app-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: greet-app-pod
+  template:
+    metadata:
+      labels:
+        name: greet-app-pod
+    spec:
+      containers:
+        - name: greet-app-container
+          image: hiteshpattanayak/greet_app:latest

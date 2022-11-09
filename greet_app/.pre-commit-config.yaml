@@ -1,0 +1,7 @@
+repos:
+  - repo: local
+    hooks:
+      - id: buf-lint
+        name: buf-lint
+        entry: bash -c 'lines=$(task lint | wc -l) && (( lines > 10)) && exit 0'
+        language: system

@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+  name: greet-app-ingress
+  namespace: default
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: grpctest.dev.mydomain.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: greet-app-svc
+                port:
+                  number: 50059                                                                                                                                                                                                                                                                                                                                                                   

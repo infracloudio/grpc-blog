@@ -1,0 +1,7 @@
+version: v1
+plugins:
+  - name: gogofaster
+    out: .
+    opt:
+      - paths=source_relative
+      - plugins=grpc

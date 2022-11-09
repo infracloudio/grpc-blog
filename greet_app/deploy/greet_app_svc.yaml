@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: greet-app-svc
+  name: greet-app-svc
+spec:
+  ports:
+    - port: 50059
+      protocol: TCP
+      targetPort: 50059
+  selector:
+    app: greet-app-pod
+  type: ClusterIP
