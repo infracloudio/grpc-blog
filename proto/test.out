@@ -1,0 +1,30 @@
+goos: linux
+goarch: amd64
+pkg: github.com/infracloudio/grpc-blog/proto
+cpu: AMD Ryzen 5 4600U with Radeon Graphics         
+BenchmarkJSONMarshal/SmallData-12         	 3570306	       356.3 ns/op	      64 B/op	       1 allocs/op
+BenchmarkJSONMarshal/MediumData-12        	  839832	      1439 ns/op	     480 B/op	       2 allocs/op
+BenchmarkJSONMarshal/LargeData-12         	  438986	      3375 ns/op	    1600 B/op	       2 allocs/op
+
+BenchmarkJSONUnmarshal/SmallData-12       	  853492	      1454 ns/op	     248 B/op	       6 allocs/op
+BenchmarkJSONUnmarshal/MediumData-12      	  299504	      3607 ns/op	     376 B/op	       9 allocs/op
+BenchmarkJSONUnmarshal/LargeData-12       	  147810	      7800 ns/op	     832 B/op	      13 allocs/op
+
+BenchmarkProtocMarshal/SmallData-12       	 6055455	       200.6 ns/op	      32 B/op	       1 allocs/op
+BenchmarkProtocMarshal/MediumData-12      	 2776018	       430.7 ns/op	     176 B/op	       1 allocs/op
+BenchmarkProtocMarshal/LargeData-12       	 1354160	       884.9 ns/op	     640 B/op	       1 allocs/op
+
+BenchmarkGogoPbMarshal/SmallData-12       	 3445024	       372.6 ns/op	      48 B/op	       2 allocs/op
+BenchmarkGogoPbMarshal/MediumData-12      	 1955707	       625.9 ns/op	     192 B/op	       2 allocs/op
+BenchmarkGogoPbMarshal/LargeData-12       	 1210491	       994.9 ns/op	     656 B/op	       2 allocs/op
+
+BenchmarkProtocUnMarshal/SmallData-12     	  855835	      1380 ns/op	     248 B/op	       6 allocs/op
+BenchmarkProtocUnMarshal/MediumData-12    	  304260	      3668 ns/op	     376 B/op	       9 allocs/op
+BenchmarkProtocUnMarshal/LargeData-12     	  127644	      7875 ns/op	     832 B/op	      13 allocs/op
+
+BenchmarkGogoPbUnMarshal/SmallData-12     	 1000000	      1423 ns/op	     248 B/op	       6 allocs/op
+BenchmarkGogoPbUnMarshal/MediumData-12    	  336116	      3487 ns/op	     376 B/op	       9 allocs/op
+BenchmarkGogoPbUnMarshal/LargeData-12     	  138409	      7608 ns/op	     832 B/op	      13 allocs/op
+
+PASS
+ok  	github.com/infracloudio/grpc-blog/proto	27.652s
