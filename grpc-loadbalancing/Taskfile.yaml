@@ -1,0 +1,70 @@
+version: '3'
+
+tasks:
+  generate:
+    desc: "Generate code"
+    cmds:
+      - protoc --go_out=. --go-grpc_out=. proto/greet.proto
+
+  describe-greet:
+    desc: "Lists out greet services"
+    cmds:
+      - grpcurl -plaintext localhost:50051 describe
+
+  compile-greet-server:
+    cmds:
+      - go build -a -o ./build/out/greetServer greetServer/main.go
+
+  compile-rest-server:
+    cmds:
+      - go build -a -o ./build/out/restServer restServer/main.go
+
+  compile-greet-client:
+    cmds:
+      - go build -a -o ./build/out/greetClient greetClient/main.go
+
+  compile-rest-client:
+    cmds:
+      - go build -a -o ./build/out/restClient restClient/main.go
+
+  deps:
+    cmds:
+      - go mod download
+
+  clean:
+    cmds:
+      - go clean -testcache
+      - rm -rf ./build/out
+
+
+  package-greet-server:
+    cmds:
+      - docker build --file build/packages/Dockerfile.greetServer -t hiteshpattanayak/greet-grpc-server:1.0 .
+
+  package-rest-server:
+    cmds:
+      - docker build --file build/packages/Dockerfile.restServer -t hiteshpattanayak/rest-server:1.0 .
+
+  package-greet-client:
+    cmds:
+      - docker build --file build/packages/Dockerfile.greetClient -t hiteshpattanayak/greet-grpc-client:2.0 .
+
+  package-rest-client:
+    cmds:
+      - docker build --file build/packages/Dockerfile.restClient -t hiteshpattanayak/rest-client:1.0 .
+
+  publish-greet-server:
+    cmds:
+      - docker push hiteshpattanayak/greet-grpc-server:1.0
+
+  publish-rest-server:
+    cmds:
+      - docker push hiteshpattanayak/rest-server:1.0
+
+  publish-greet-client:
+    cmds:
+      - docker push hiteshpattanayak/greet-grpc-client:2.0
+
+  publish-rest-client:
+    cmds:
+      - docker push hiteshpattanayak/rest-client:1.0

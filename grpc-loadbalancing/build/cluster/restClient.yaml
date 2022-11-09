@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rest-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rest-client
+  template:
+    metadata:
+      labels:
+        app: rest-client
+    spec:
+      containers:
+        - name: rest-client
+          image: hiteshpattanayak/rest-client:1.0
+          imagePullPolicy: Always
+          env:
+            - name: SERVER_HOST
+              value: rest-service
+            - name: SERVER_PORT
+              value: "9090"
+            - name: REQUEST_COUNT
+              value: "10"

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: greet-grpc-server
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: greet-grpc-server
+  template:
+    metadata:
+      labels:
+        app: greet-grpc-server
+    spec:
+      containers:
+        - name: greet-grpc-server
+          image: hiteshpattanayak/greet-grpc-server:1.0
+          imagePullPolicy: Always
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP

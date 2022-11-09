@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: greet-grpc-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: greet-grpc-client
+  template:
+    metadata:
+      labels:
+        app: greet-grpc-client
+    spec:
+      containers:
+        - name: greet-grpc-client
+          image: hiteshpattanayak/greet-grpc-client:2.0
+          imagePullPolicy: Always
+          env:
+            - name: GRPC_SERVER_HOST
+              value: grpc-server-service
+            - name: GRPC_SERVER_PORT
+              value: "50051"
+            - name: REQUEST_COUNT
+              value: "10"
