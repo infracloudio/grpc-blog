@@ -2,7 +2,9 @@ package app
 
 import (
 	"fmt"
+	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	"github.com/infracloudio/grpc-blog/greet_app/internal/app/server"
+	"github.com/infracloudio/grpc-blog/greet_app/internal/pkg/middleware"
 	greetpb "github.com/infracloudio/grpc-blog/greet_app/internal/pkg/proto"
 	"google.golang.org/grpc"
 	"log"
@@ -31,8 +33,12 @@ func (a *App) Start() {
 	}
 
 	opts := []grpc.ServerOption{}
+	opts = append(opts, middleware.GetGrpcMiddlewareOpts()...)
 	a.grpcServer = grpc.NewServer(opts...)
 	greetpb.RegisterGreetServiceServer(a.grpcServer, server.GetNewGreetServer())
+
+	grpc_prometheus.Register(a.grpcServer)
+	middleware.RunPrometheusServer()
 
 	go func() {
 		if err := a.grpcServer.Serve(lis); err != nil {
