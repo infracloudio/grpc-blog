@@ -5,9 +5,15 @@ import (
 	"github.com/infracloudio/grpc-blog/greet_app/internal/app/server"
 	greetpb "github.com/infracloudio/grpc-blog/greet_app/internal/pkg/proto"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"log"
 	"net"
 	"os"
+)
+
+const (
+	SSL_CERT_PATH = "internal/ssl/server.crt"
+	SSL_KEY_PATH  = "internal/ssl/server.pem"
 )
 
 type App struct {
@@ -31,6 +37,18 @@ func (a *App) Start() {
 	}
 
 	opts := []grpc.ServerOption{}
+
+	certFile := SSL_CERT_PATH
+	keyFile := SSL_KEY_PATH
+
+	creds, sslErr := credentials.NewServerTLSFromFile(certFile, keyFile)
+	if sslErr != nil {
+		log.Fatalf("Failed to load certificates: %v", sslErr)
+		return
+	}
+
+	opts = append(opts, grpc.Creds(creds))
+
 	a.grpcServer = grpc.NewServer(opts...)
 	greetpb.RegisterGreetServiceServer(a.grpcServer, server.GetNewGreetServer())
 
