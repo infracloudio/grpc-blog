@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package info;
+
+option go_package = "github.com/infracloudio/grpc-blog/proto/example";
+
+message Person {
+  optional string name = 1;
+  optional string id = 2;
+  optional string email = 3;
+}

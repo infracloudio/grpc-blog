@@ -8,3 +8,7 @@ tasks:
   gen-gogo-pb:
     cmds:
       - protoc --gofast_out=. gogo_protobuf/*.proto
+
+  gen-example:
+    cmds:
+      - protoc --go_out=. --go_opt=paths=source_relative example/*.proto
