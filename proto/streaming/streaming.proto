@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package info;
+
+option go_package = "github.com/infracloudio/grpc-blog/proto/streaming";
+
+message HelloRequest {
+  string name = 1;
+  string description = 2;
+  int32 id = 3;
+}
+
+message HelloResponse {
+  string processedMessage = 1;
+}
+
+service HelloService {
+  // server side streaming
+  rpc LotsOfReplies(HelloRequest) returns (stream HelloResponse);
+
+  // client side streaming
+  rpc LotsOfGreetings(stream HelloRequest) returns (HelloResponse);
+
+  // Bidirectional streaming
+  rpc BidiHello(stream HelloRequest) returns (stream HelloResponse);
+}
