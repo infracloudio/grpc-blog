@@ -9,73 +9,69 @@ import (
 	"testing"
 )
 
-func main() {
-
-}
-
 func BenchmarkJSONMarshal(b *testing.B) {
-	s := protocSmall
-	m := protocMedium
-	l := protocLarge
+	s := jsonSmall
+	m := jsonMedium
+	l := jsonLarge
 
 	b.ResetTimer()
 
 	b.Run("SmallData", func(b *testing.B) {
-		b.ReportAllocs()
 		for n := 0; n < b.N; n++ {
 			d, _ := json.Marshal(&s)
 			_ = d
 		}
+		b.ReportAllocs()
 	})
 	b.Run("MediumData", func(b *testing.B) {
-		b.ReportAllocs()
 		for n := 0; n < b.N; n++ {
 			d, _ := json.Marshal(&m)
 			_ = d
 		}
+		b.ReportAllocs()
 	})
 	b.Run("LargeData", func(b *testing.B) {
-		b.ReportAllocs()
 		for n := 0; n < b.N; n++ {
 			d, _ := json.Marshal(&l)
 			_ = d
 		}
+		b.ReportAllocs()
 	})
 	fmt.Printf("\n")
 }
 
 func BenchmarkJSONUnmarshal(b *testing.B) {
-	s := protocSmall
-	m := protocMedium
-	l := protocLarge
+	s := jsonSmall
+	m := jsonMedium
+	l := jsonLarge
 
 	sd, _ := json.Marshal(&s)
 	md, _ := json.Marshal(&m)
 	ld, _ := json.Marshal(&l)
 
-	var sf protoc.BenchSmall
-	var mf protoc.BenchMedium
-	var lf protoc.BenchLarge
+	var sf []byte
+	var mf []byte
+	var lf []byte
 
 	b.ResetTimer()
 
 	b.Run("SmallData", func(b *testing.B) {
-		b.ReportAllocs()
 		for n := 0; n < b.N; n++ {
 			_ = json.Unmarshal(sd, &sf)
 		}
+		b.ReportAllocs()
 	})
 	b.Run("MediumData", func(b *testing.B) {
-		b.ReportAllocs()
 		for n := 0; n < b.N; n++ {
 			_ = json.Unmarshal(md, &mf)
 		}
+		b.ReportAllocs()
 	})
 	b.Run("LargeData", func(b *testing.B) {
-		b.ReportAllocs()
 		for n := 0; n < b.N; n++ {
 			_ = json.Unmarshal(ld, &lf)
 		}
+		b.ReportAllocs()
 	})
 	fmt.Printf("\n")
 }
@@ -88,25 +84,25 @@ func BenchmarkProtocMarshal(b *testing.B) {
 	b.ResetTimer()
 
 	b.Run("SmallData", func(b *testing.B) {
-		b.ReportAllocs()
 		for n := 0; n < b.N; n++ {
 			d, _ := proto.Marshal(&s)
 			_ = d
 		}
+		b.ReportAllocs()
 	})
 	b.Run("MediumData", func(b *testing.B) {
-		b.ReportAllocs()
 		for n := 0; n < b.N; n++ {
 			d, _ := proto.Marshal(&m)
 			_ = d
 		}
+		b.ReportAllocs()
 	})
 	b.Run("LargeData", func(b *testing.B) {
-		b.ReportAllocs()
 		for n := 0; n < b.N; n++ {
 			d, _ := proto.Marshal(&l)
 			_ = d
 		}
+		b.ReportAllocs()
 	})
 	fmt.Printf("\n")
 }
@@ -119,25 +115,25 @@ func BenchmarkGogoPbMarshal(b *testing.B) {
 	b.ResetTimer()
 
 	b.Run("SmallData", func(b *testing.B) {
-		b.ReportAllocs()
 		for n := 0; n < b.N; n++ {
 			d, _ := proto.Marshal(&s)
 			_ = d
 		}
+		b.ReportAllocs()
 	})
 	b.Run("MediumData", func(b *testing.B) {
-		b.ReportAllocs()
 		for n := 0; n < b.N; n++ {
 			d, _ := proto.Marshal(&m)
 			_ = d
 		}
+		b.ReportAllocs()
 	})
 	b.Run("LargeData", func(b *testing.B) {
-		b.ReportAllocs()
 		for n := 0; n < b.N; n++ {
 			d, _ := proto.Marshal(&l)
 			_ = d
 		}
+		b.ReportAllocs()
 	})
 	fmt.Printf("\n")
 }
@@ -147,9 +143,9 @@ func BenchmarkProtocUnMarshal(b *testing.B) {
 	m := protocMedium
 	l := protocLarge
 
-	sd, _ := json.Marshal(&s)
-	md, _ := json.Marshal(&m)
-	ld, _ := json.Marshal(&l)
+	sd, _ := proto.Marshal(&s)
+	md, _ := proto.Marshal(&m)
+	ld, _ := proto.Marshal(&l)
 
 	var sf protoc.BenchSmall
 	var mf protoc.BenchMedium
@@ -158,22 +154,22 @@ func BenchmarkProtocUnMarshal(b *testing.B) {
 	b.ResetTimer()
 
 	b.Run("SmallData", func(b *testing.B) {
-		b.ReportAllocs()
 		for n := 0; n < b.N; n++ {
-			_ = json.Unmarshal(sd, &sf)
+			_ = proto.Unmarshal(sd, &sf)
 		}
+		b.ReportAllocs()
 	})
 	b.Run("MediumData", func(b *testing.B) {
-		b.ReportAllocs()
 		for n := 0; n < b.N; n++ {
-			_ = json.Unmarshal(md, &mf)
+			_ = proto.Unmarshal(md, &mf)
 		}
+		b.ReportAllocs()
 	})
 	b.Run("LargeData", func(b *testing.B) {
-		b.ReportAllocs()
 		for n := 0; n < b.N; n++ {
-			_ = json.Unmarshal(ld, &lf)
+			_ = proto.Unmarshal(ld, &lf)
 		}
+		b.ReportAllocs()
 	})
 	fmt.Printf("\n")
 }
@@ -183,9 +179,9 @@ func BenchmarkGogoPbUnMarshal(b *testing.B) {
 	m := gogoPbMedium
 	l := gogoPbLarge
 
-	sd, _ := json.Marshal(&s)
-	md, _ := json.Marshal(&m)
-	ld, _ := json.Marshal(&l)
+	sd, _ := proto.Marshal(&s)
+	md, _ := proto.Marshal(&m)
+	ld, _ := proto.Marshal(&l)
 
 	var sf gogo_protobuf.BenchSmall
 	var mf gogo_protobuf.BenchMedium
@@ -194,22 +190,22 @@ func BenchmarkGogoPbUnMarshal(b *testing.B) {
 	b.ResetTimer()
 
 	b.Run("SmallData", func(b *testing.B) {
-		b.ReportAllocs()
 		for n := 0; n < b.N; n++ {
-			_ = json.Unmarshal(sd, &sf)
+			_ = proto.Unmarshal(sd, &sf)
 		}
+		b.ReportAllocs()
 	})
 	b.Run("MediumData", func(b *testing.B) {
-		b.ReportAllocs()
 		for n := 0; n < b.N; n++ {
-			_ = json.Unmarshal(md, &mf)
+			_ = proto.Unmarshal(md, &mf)
 		}
+		b.ReportAllocs()
 	})
 	b.Run("LargeData", func(b *testing.B) {
-		b.ReportAllocs()
 		for n := 0; n < b.N; n++ {
-			_ = json.Unmarshal(ld, &lf)
+			_ = proto.Unmarshal(ld, &lf)
 		}
+		b.ReportAllocs()
 	})
 	fmt.Printf("\n")
 }
