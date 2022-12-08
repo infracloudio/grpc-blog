@@ -5,6 +5,7 @@ import (
 	"github.com/infracloudio/grpc-blog/greet_app/internal/app/server"
 	greetpb "github.com/infracloudio/grpc-blog/greet_app/internal/pkg/proto"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 	"log"
 	"net"
 	"os"
@@ -33,6 +34,7 @@ func (a *App) Start() {
 	opts := []grpc.ServerOption{}
 	a.grpcServer = grpc.NewServer(opts...)
 	greetpb.RegisterGreetServiceServer(a.grpcServer, server.GetNewGreetServer())
+	reflection.Register(a.grpcServer)
 
 	go func() {
 		if err := a.grpcServer.Serve(lis); err != nil {

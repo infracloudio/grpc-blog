@@ -74,3 +74,9 @@ tasks:
   run:client:
     cmds:
       - go run internal/app/client/client.go
+
+  evans:
+    evans -r repl -p 50059
+
+  evans-without-reflection:
+    evans --proto internal/pkg/greet.proto repl
